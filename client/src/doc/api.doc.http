@@ -1,0 +1,58 @@
+@baseUrl = https://connections-api.herokuapp.com
+
+### Registration
+POST {{baseUrl}}/users/signup
+  Content-type: application/json
+
+  {
+    "name": "rrrr",
+    "email": "super@ua.com",
+    "password": "qwerty1"
+  }
+
+### login
+# @name authLogin
+POST {{baseUrl}}/users/login
+  Content-type: application/json
+
+  {
+    "email": "super@ua.com",
+    "password": "qwerty1"
+  }
+  
+### logout
+POST {{baseUrl}}/users/logout
+  Authorization: Bearer {{authLogin.response.body.token}}
+  
+### Check session
+GET {{baseUrl}}/users/current
+  Authorization: Bearer {{authLogin.response.body.token}}
+
+### Get contacts
+GET {{baseUrl}}/contacts
+  Authorization: Bearer {{authLogin.response.body.token}}
+
+### Add contact
+POST {{baseUrl}}/contacts
+  Content-type: application/json
+  Authorization: Bearer {{authLogin.response.body.token}}
+
+{
+  "name": "Jacob Mercer",
+  "number": "761-23-96"
+}
+
+### Delete contact
+DELETE  {{baseUrl}}/contacts/62b4e0414bb12b0015bc2191
+  Authorization: Bearer {{authLogin.response.body.token}}
+
+  
+### Update contact
+PATCH   {{baseUrl}}/contacts/62b4e0674bb12b0015bc2195
+  Content-type: application/json
+  Authorization: Bearer {{authLogin.response.body.token}}
+
+{
+  "name": "qqqqq",
+  "number": "22222"
+}
