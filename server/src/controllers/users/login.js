@@ -24,6 +24,7 @@ const login = async (req, res) => {
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "12h" });
   await serviceUsers.updateUserTokenById(user._id, { token });
   res.json({
+    message: "success",
     token,
     user: {
       email: user.email,
