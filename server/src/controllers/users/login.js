@@ -1,32 +1,26 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const serviceUsers = require("../../services/users");
 const { createError } = require("../../helpers");
-
-const { SECRET_KEY } = process.env;
 
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await serviceUsers.getUserByEmail(email);
-  if (!user) {
-    throw createError(401, "Email or password is wrong");
-  }
-  const comparePassword = await bcrypt.compare(password, user.password);
-  if (!comparePassword) {
-    throw createError(401, "Email or password is wrong");
+  if (!user || !bcrypt.compareSync(password, user.password)) {
+    throw createError(400, "Email or password is wrong");
   }
   if (!user.verify) {
-    throw createError(401, "Email not verify");
+    throw createError(403, "Email not verify");
   }
-  const payload = {
-    id: user._id,
-  };
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "12h" });
-  await serviceUsers.updateUserTokenById(user._id, { token });
+  const token = user.createToken();
+  const updToken = await serviceUsers.updateUserTokenById(user._id, token);
+  if (!updToken) {
+    throw createError(401, "Not registered, token missed");
+  }
   res.json({
-    message: "success",
+    message: "Authentification Success",
     token,
     user: {
+      name: user.name,
       email: user.email,
       subscription: user.subscription,
     },

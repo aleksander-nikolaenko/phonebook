@@ -3,8 +3,8 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
+import GoogleIcon from '@mui/icons-material/Google';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Grid from '@mui/material/Grid';
@@ -162,7 +162,6 @@ export default function SignUp() {
                   type="text"
                   label="Your name"
                   autoComplete="name"
-                  autoFocus
                   onChange={handleChange}
                 />
               </Grid>
@@ -181,7 +180,7 @@ export default function SignUp() {
                   onChange={handleChange}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sx={{ position: 'relative' }}>
                 <TextField
                   error={!!errors.password}
                   helperText={
@@ -196,33 +195,41 @@ export default function SignUp() {
                   value={values.password}
                   type={values.showPassword ? 'text' : 'password'}
                   label="Password"
-                  autoComplete="new-password"
+                  autoComplete="password"
                   onChange={handleChange}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          edge="end"
-                        >
-                          {values.showPassword ? (
-                            <VisibilityOff />
-                          ) : (
-                            <Visibility />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
                 />
+                <IconButton
+                  sx={{
+                    position: 'absolute',
+                    right: '20px',
+                    top: '23px',
+                  }}
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  edge="end"
+                >
+                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
               </Grid>
             </Grid>
+
+            <Button
+              component="a"
+              href={`${process.env.REACT_APP_BASE_API_URL}/users/google`}
+              fullWidth
+              color="error"
+              variant="contained"
+              startIcon={<GoogleIcon />}
+              sx={{ pt: 1, pb: 1, mt: 3, mb: 2 }}
+            >
+              Sign In with Google
+            </Button>
+
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ pt: 1, pb: 1, mb: 2 }}
             >
               {isLoading ? <LoaderButton /> : 'Sign Up'}
             </Button>

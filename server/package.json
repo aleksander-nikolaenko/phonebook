@@ -1,5 +1,5 @@
 {
-  "name": "contacts-rest-api",
+  "name": "phonebook-rest-api",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@sendgrid/mail": "^7.7.0",
-    "bcryptjs": "^2.4.3",
+    "bcrypt": "^5.0.1",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^16.0.1",
@@ -23,6 +23,8 @@
     "mongoose": "^6.4.5",
     "morgan": "1.10.0",
     "multer": "^1.4.5-lts.1",
+    "query-string": "^7.1.1",
+    "swagger-ui-express": "^4.5.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

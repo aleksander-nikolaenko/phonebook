@@ -1,50 +1,48 @@
 const express = require("express");
 const ctrlUsers = require("../../controllers/users");
 const { ctrlWrapper } = require("../../helpers");
-const {
-  validationReqBody,
-  validationToken,
-  fileUpload,
-} = require("../../middlewares");
+const { validation, auth } = require("../../middleware");
 const { schemas } = require("../../models/user");
 
 const router = new express.Router();
 
 router.post(
-  "/signup",
-  validationReqBody(schemas.register),
+  "/register",
+  validation(schemas.register),
   ctrlWrapper(ctrlUsers.register)
-);
-
-router.post(
-  "/login",
-  validationReqBody(schemas.register),
-  ctrlWrapper(ctrlUsers.login)
-);
-
-router.get("/logout", validationToken, ctrlWrapper(ctrlUsers.logout));
-
-router.get("/current", validationToken, ctrlWrapper(ctrlUsers.getCurrent));
-
-router.patch(
-  "/",
-  validationToken,
-  validationReqBody(schemas.update),
-  ctrlWrapper(ctrlUsers.updateSubscription)
-);
-
-router.patch(
-  "/avatars",
-  validationToken,
-  fileUpload.single("avatar"),
-  ctrlWrapper(ctrlUsers.updateAvatar)
 );
 
 router.get("/verify/:verificationToken", ctrlWrapper(ctrlUsers.verifyEmail));
 router.post(
   "/verify",
-  validationReqBody(schemas.verify),
+  validation(schemas.verify),
   ctrlWrapper(ctrlUsers.repeatVerifyEmail)
 );
+
+router.get("/google", ctrlWrapper(ctrlUsers.googleAuth));
+
+router.get("/google-redirect", ctrlWrapper(ctrlUsers.googleRedirect));
+
+router.post("/login", validation(schemas.login), ctrlWrapper(ctrlUsers.login));
+
+router.get("/logout", auth, ctrlWrapper(ctrlUsers.logout));
+
+router.get("/", auth, ctrlWrapper(ctrlUsers.currentUser));
+
+router.delete("/", auth, ctrlWrapper(ctrlUsers.deleteUser));
+
+// router.patch(
+//   "/",
+//   validationToken,
+//   validationReqBody(schemas.update),
+//   ctrlWrapper(ctrlUsers.updateSubscription)
+// );
+
+// router.patch(
+//   "/avatars",
+//   validationToken,
+//   fileUpload.single("avatar"),
+//   ctrlWrapper(ctrlUsers.updateAvatar)
+// );
 
 module.exports = router;

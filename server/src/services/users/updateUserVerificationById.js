@@ -4,7 +4,7 @@ const updateUserVerificationById = (userId) => {
   const result = User.findByIdAndUpdate(
     userId,
     {
-      verificationToken: "",
+      verificationToken: null,
       verify: true,
     },
     {

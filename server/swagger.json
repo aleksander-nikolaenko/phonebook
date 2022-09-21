@@ -1,0 +1,696 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0.0",
+    "title": "Phonebook V1 API docs",
+    "description": "Documentation for phonebook application",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "servers": [{ "url": "https://nik-phonebook.herokuapp.com//api/" }],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "User endpoints"
+    }
+  ],
+
+  "paths": {
+    "/users/register": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Users registration",
+        "parameters": [],
+
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationSuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationConflictResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/users/verify": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Users email verification (Resend verification email)",
+        "parameters": [],
+
+        "requestBody": {
+          "description": "Verification's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerificationRequest"
+              }
+            }
+          }
+        },
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationSuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Verification has already been passed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/users/verify/{verificationToken}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Users verification email (works only from the browser)",
+        "parameters": [
+          {
+            "name": "verificationToken",
+            "in": "path",
+            "description": "Verification token ",
+            "required": true,
+            "type": "string",
+            "example": "0bc288cd-59d2-409a-b21c-7605071ff704"
+          }
+        ],
+
+        "responses": {
+          "302": {
+            "description": "Successful operation. Redirect to Phonebook app",
+            "content": {}
+          },
+          "404": {
+            "description": "Invalid verification code or other error, try again",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/users/google": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Google registration and authentication (works only from the browser)",
+        "parameters": [],
+
+        "responses": {
+          "302": {
+            "description": "Successful operation (redirect to front-end with accessToken)",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized, token missed, try again",
+            "content": {}
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/users/login": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "User authentication",
+        "parameters": [],
+
+        "requestBody": {
+          "description": "Login object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginSuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request(invalid request body)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Email not verify",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/users/logout": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Logout",
+        "security": [{ "Bearer": [] }],
+        "parameters": [],
+
+        "responses": {
+          "204": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoTokenResponse"
+                }
+              }
+            }
+          },
+
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/users": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get user info",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserObject"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoTokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found (user not found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      },
+
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Clear all user info",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDeleteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoTokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserInfo": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "User ID",
+            "example": "630e5122be86e9879b691ce7"
+          },
+          "name": {
+            "type": "string",
+            "description": "User name",
+            "example": "user"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "token": {
+            "type": "string",
+            "description": "User access token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMGU1MTIyYmU4NmU5ODc5YjY5MWNlNyIsInJvbGVzIjpbIlVTRVIiXSwiaWF0IjoxNjYxODk3MTkxLCJleHAiOjE2NjE5NDAzOTF9.7ExJjGyTzewlvehfunLc2PiRM6Yl_P0tII_rkSEmTJE"
+          },
+          "avatarURL": {
+            "type": "string",
+            "description": "User avatar link",
+            "example": "//www.gravatar.com/avatar/e2ded87603fb1c936ea7d996c16dc197"
+          },
+          "subscription": {
+            "type": "string",
+            "description": "User subscription",
+            "enum": ["starter", "pro", "business"],
+            "example": "starter"
+          },
+          "verify": {
+            "type": "boolean",
+            "description": "User email verification",
+            "example": true
+          },
+          "verificationToken": {
+            "type": "string",
+            "description": "User email verification token",
+            "example": null
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "User create date ",
+            "example": "2022-08-31T12:11:33.011Z"
+          }
+        },
+        "example": {
+          "_id": "630f4ff5bc3e00498339dd77",
+          "name": "user",
+          "email": "user@example.com",
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMGY0ZmY1YmMzZTAwNDk4MzM5ZGQ3NyIsInJvbGVzIjpbIlVTRVIiXSwiaWF0IjoxNjYxOTUxNTYwLCJleHAiOjE2NjE5OTQ3NjB9.Tb0-02JZnklScz7zmTuOMEsawLlmh58QVsgdl_tiZ2w",
+          "avatarURL": "//www.gravatar.com/avatar/e2ded87603fb1c936ea7d996c16dc197",
+          "subscription": "starter",
+          "verify": true,
+          "verificationToken": null,
+          "createdAt": "2022-08-31T12:11:33.011Z",
+          "updatedAt": "2022-08-31T13:12:40.640Z"
+        }
+      },
+
+      "UserObject": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/UserInfo"
+          }
+        }
+      },
+
+      "UserDeleteResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "message",
+            "example": "User deleted successfully"
+          },
+          "user": { "$ref": "#/components/schemas/UserInfo" }
+        }
+      },
+
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["name", "email", "password"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name",
+            "minLength": 2,
+            "maxLength": 23,
+            "example": "user"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email",
+            "minLength": 6,
+            "example": "user@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "minLength": 6,
+            "maxLength": 50,
+            "example": "qwerty123"
+          }
+        }
+      },
+      "RegistrationSuccessResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "message",
+            "example": "User created. Please check your email: user@example.com and confirm then"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "User's name",
+                "example": "user"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "example": "user@example.com"
+              },
+              "subscription": {
+                "type": "string",
+                "description": "User's subscription",
+                "example": "starter"
+              }
+            }
+          }
+        }
+      },
+
+      "RegistrationConflictResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "error message",
+            "example": "Email is already used"
+          }
+        }
+      },
+
+      "VerificationRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email",
+            "minLength": 6
+          }
+        }
+      },
+
+      "VerificationSuccessResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "success message",
+            "example": "Verification email sent"
+          }
+        }
+      },
+
+      "VerificationErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "error message",
+            "example": "Verification has already been passed"
+          }
+        }
+      },
+
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email",
+            "minLength": 6
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "minLength": 6,
+            "maxLength": 50,
+            "example": "qwerty123"
+          }
+        }
+      },
+
+      "LoginSuccessResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "message",
+            "example": "Authentification Success"
+          },
+          "token": {
+            "type": "string",
+            "description": "user access token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMGY0ZmY1YmMzZTAwNDk4MzM5ZGQ3NyIsInJvbGVzIjpbIlVTRVIiXSwiaWF0IjoxNjYxOTQ4NzAwLCJleHAiOjE2NjE5OTE5MDB9.EfzZDVGuT6RlkknjypYIfdpQy5UDpCDwTaSCxv42Deo"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "User's name",
+                "example": "user"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "example": "user@example.com"
+              },
+              "subscription": {
+                "type": "string",
+                "description": "User's subscription",
+                "example": "starter"
+              }
+            }
+          }
+        }
+      },
+
+      "LoginErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "error message",
+            "example": "Email not verify"
+          }
+        }
+      },
+
+      "NotFoundResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "error message",
+            "example": "Not found"
+          }
+        }
+      },
+
+      "NoTokenResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "error message",
+            "example": "Missing authentication token"
+          }
+        }
+      },
+
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "error message"
+          }
+        }
+      }
+    },
+
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

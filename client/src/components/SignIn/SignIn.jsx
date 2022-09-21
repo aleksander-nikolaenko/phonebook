@@ -1,10 +1,9 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
+import GoogleIcon from '@mui/icons-material/Google';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -18,7 +17,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from 'redux/operations/operations-user';
 import selectors from 'redux/selectors';
 import { LoaderButton } from 'components/LoaderButton';
-var CryptoJS = require('crypto-js');
 
 const theme = createTheme();
 
@@ -29,7 +27,6 @@ export default function SignIn() {
   const [values, setValues] = React.useState({
     email: '',
     password: '',
-    checkedRemember: false,
   });
 
   const [errors, setErrors] = React.useState({
@@ -37,23 +34,6 @@ export default function SignIn() {
     password: '',
   });
 
-  React.useEffect(() => {
-    if (localStorage.getItem('savedUser')) {
-      const receivedData = localStorage.getItem('savedUser');
-      const bytes = CryptoJS.AES.decrypt(receivedData, 'savedUser');
-      const decryptedData = JSON.parse(
-        JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
-      );
-      const { email, password, checkedRemember } = decryptedData;
-      setValues({
-        ...values,
-        email,
-        password,
-        checkedRemember,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   const validationField = (name, value) => {
     if (!value) {
       setErrors({
@@ -72,9 +52,6 @@ export default function SignIn() {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
   };
-  const handleRememberChange = event => {
-    setValues({ ...values, checkedRemember: event.target.checked });
-  };
 
   const handleSubmit = async event => {
     event.preventDefault();
@@ -83,22 +60,11 @@ export default function SignIn() {
       email: data.get('email'),
       password: data.get('password'),
     };
-    const savedData = JSON.stringify({
-      ...userData,
-      checkedRemember: values.checkedRemember,
-    });
 
     if (
       validationField('email', userData.email) &&
       validationField('password', userData.password)
     ) {
-      const text = CryptoJS.AES.encrypt(
-        JSON.stringify(savedData),
-        'savedUser'
-      ).toString();
-      values.checkedRemember
-        ? localStorage.setItem('savedUser', text)
-        : localStorage.removeItem('savedUser');
       try {
         await dispatch(loginUser(userData)).unwrap();
         navigate(routesPaths.contactsPage);
@@ -143,7 +109,6 @@ export default function SignIn() {
               value={values.email}
               label="Email Address"
               autoComplete="email"
-              autoFocus
               onChange={handleChange}
             />
             <TextField
@@ -160,23 +125,23 @@ export default function SignIn() {
               autoComplete="current-password"
               onChange={handleChange}
             />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={values.checkedRemember}
-                  onChange={handleRememberChange}
-                  inputProps={{ 'aria-label': 'controlled' }}
-                  value="remember"
-                  color="primary"
-                />
-              }
-              label="Remember me"
-            />
+            <Button
+              component="a"
+              href={`${process.env.REACT_APP_BASE_API_URL}/auth/google`}
+              fullWidth
+              color="error"
+              variant="contained"
+              startIcon={<GoogleIcon />}
+              sx={{ pt: 1, pb: 1, mt: 3, mb: 2 }}
+            >
+              Sign In with Google
+            </Button>
+
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ pt: 1, pb: 1, mb: 2 }}
             >
               {isLoading ? <LoaderButton /> : 'Sign In'}
             </Button>
