@@ -15,11 +15,12 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 import { routesPaths } from 'routerSettings/routesPaths';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { registerUser } from 'redux/operations/operations-user';
 import selectors from 'redux/selectors';
 import { LoaderButton } from 'components/LoaderButton';
+import { Modal } from 'components/Modal';
 
 const theme = createTheme();
 
@@ -28,8 +29,9 @@ const EMAIL_REGEX = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 const PWD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
 
 export default function SignUp() {
+  const [showModal, setShowModal] = React.useState(false);
+  const [modalText, setModalText] = React.useState('');
   const isLoading = useSelector(selectors.getIsLoading);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [values, setValues] = React.useState({
     name: '',
@@ -117,10 +119,15 @@ export default function SignUp() {
       validationField('password', userData.password, PWD_REGEX)
     ) {
       try {
-        await dispatch(registerUser(userData)).unwrap();
-        navigate(routesPaths.contactsPage);
+        const result = await dispatch(registerUser(userData)).unwrap();
+        setModalText(result.message);
+        setShowModal(true);
       } catch (error) {
-        console.warn(error);
+        if (error.message === 'Request failed with status code 409') {
+          toast.error(`This user already exist`);
+        } else {
+          toast.error(`Error. Try again.`);
+        }
       }
     }
   };
@@ -242,6 +249,26 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
+        <Modal active={showModal} setActive={setShowModal}>
+          <p>{modalText}</p>
+          <Button
+            type="button"
+            fullWidth
+            variant="contained"
+            sx={{ pt: 1, pb: 1, width: '60px' }}
+            onClick={() => {
+              setValues({
+                name: '',
+                email: '',
+                password: '',
+                showPassword: false,
+              });
+              setShowModal(false);
+            }}
+          >
+            Ok
+          </Button>
+        </Modal>
       </Container>
     </ThemeProvider>
   );

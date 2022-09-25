@@ -14,9 +14,12 @@ import { Link } from 'react-router-dom';
 import { routesPaths } from 'routerSettings/routesPaths';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { loginUser } from 'redux/operations/operations-user';
 import selectors from 'redux/selectors';
 import { LoaderButton } from 'components/LoaderButton';
+import { ModalVerifyEmail } from 'components/ModalVerifyEmail';
+import { ModalForgotPassword } from 'components/ModalForgotPassword';
 
 const theme = createTheme();
 
@@ -24,6 +27,12 @@ export default function SignIn() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isLoading = useSelector(selectors.getIsLoading);
+  const [showLink, setShowLink] = React.useState({
+    isVisibleForgot: false,
+    isVisibleVerify: false,
+  });
+  const [showModalVerify, setShowModalVerify] = React.useState(false);
+  const [showModalForgot, setShowModalForgot] = React.useState(false);
   const [values, setValues] = React.useState({
     email: '',
     password: '',
@@ -36,16 +45,16 @@ export default function SignIn() {
 
   const validationField = (name, value) => {
     if (!value) {
-      setErrors({
-        ...errors,
+      setErrors(prevState => ({
+        ...prevState,
         [name]: `${name} is required`,
-      });
+      }));
       return false;
     }
-    setErrors({
-      ...errors,
+    setErrors(prevState => ({
+      ...prevState,
       [name]: ``,
-    });
+    }));
     return true;
   };
   const handleChange = event => {
@@ -69,7 +78,21 @@ export default function SignIn() {
         await dispatch(loginUser(userData)).unwrap();
         navigate(routesPaths.contactsPage);
       } catch (error) {
-        console.warn(error);
+        if (error.message === 'Request failed with status code 400') {
+          toast.error(`Wrong email or password`);
+          setShowLink({
+            isVisibleForgot: true,
+            isVisibleVerify: false,
+          });
+        } else if (error.message === 'Request failed with status code 403') {
+          toast.error(`Email not verified`);
+          setShowLink({
+            isVisibleForgot: false,
+            isVisibleVerify: true,
+          });
+        } else {
+          toast.error(`Error. Try again.`);
+        }
       }
     }
   };
@@ -125,9 +148,36 @@ export default function SignIn() {
               autoComplete="current-password"
               onChange={handleChange}
             />
+            <Grid container justifyContent="center">
+              {showLink.isVisibleForgot && (
+                <Grid item>
+                  <Link
+                    onClick={e => {
+                      e.preventDefault();
+                      setShowModalForgot(true);
+                    }}
+                  >
+                    Forgot your password
+                  </Link>
+                </Grid>
+              )}
+              {showLink.isVisibleVerify && (
+                <Grid item>
+                  <Link
+                    onClick={e => {
+                      e.preventDefault();
+                      setShowModalVerify(true);
+                    }}
+                  >
+                    Re-send verify email
+                  </Link>
+                </Grid>
+              )}
+            </Grid>
+
             <Button
               component="a"
-              href={`${process.env.REACT_APP_BASE_API_URL}/auth/google`}
+              href={`${process.env.REACT_APP_BASE_API_URL}/users/google`}
               fullWidth
               color="error"
               variant="contained"
@@ -154,6 +204,14 @@ export default function SignIn() {
             </Grid>
           </Box>
         </Box>
+        <ModalVerifyEmail
+          active={showModalVerify}
+          setActive={setShowModalVerify}
+        />
+        <ModalForgotPassword
+          active={showModalForgot}
+          setActive={setShowModalForgot}
+        />
       </Container>
     </ThemeProvider>
   );

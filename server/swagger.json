@@ -134,6 +134,53 @@
       }
     },
 
+    "/users/forgot-password": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Users forgot password (Send new password on user email)",
+        "parameters": [],
+
+        "requestBody": {
+          "description": "Verification's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            }
+          }
+        },
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForgotPasswordSuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+
     "/users/verify/{verificationToken}": {
       "get": {
         "tags": ["Users"],
@@ -463,6 +510,11 @@
       "UserObject": {
         "type": "object",
         "properties": {
+          "message": {
+            "type": "string",
+            "description": "message",
+            "example": "User authenticate successfully"
+          },
           "user": {
             "$ref": "#/components/schemas/UserInfo"
           }
@@ -569,7 +621,7 @@
           "message": {
             "type": "string",
             "description": "success message",
-            "example": "Verification email sent"
+            "example": "Verification email sent to user@example.com email address"
           }
         }
       },
@@ -581,6 +633,30 @@
             "type": "string",
             "description": "error message",
             "example": "Verification has already been passed"
+          }
+        }
+      },
+
+      "ForgotPasswordRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email",
+            "minLength": 6
+          }
+        }
+      },
+
+      "ForgotPasswordSuccessResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "success message",
+            "example": "New password sent to user@example.com email address"
           }
         }
       },

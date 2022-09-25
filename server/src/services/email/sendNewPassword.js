@@ -1,3 +1,10 @@
+const sendEmail = require("./sendEmail");
+
+const sendNewPassword = async (email, password) => {
+  const msg = {
+    to: email,
+    subject: "New password from Phonebook-app",
+    html: `
 <table
   cellpadding="0"
   cellspacing="0"
@@ -16,9 +23,9 @@
         cellpadding="0"
         cellspacing="0"
         border="0"
-        width="600"
-        class="table600"
-        style="max-width: 600px; min-width: 320px; background: #ffffff"
+        width="650"
+        class="table650"
+        style="max-width: 650px; min-width: 320px; background: #ffffff"
       >
         <tr>
           <td width="30" style="width: 30px; max-width: 30px; min-width: 30px">
@@ -37,46 +44,31 @@
                 color: #2c32d4;
               "
             >
-              Hello, welcome Phonebook app
+              Hello, ${email}
+            </p>
+            <div style="height: 20px; line-height: 20px; font-size: 20px">
+              &nbsp;
+            </div>
+            <p
+              style="
+                font-size: 24px;
+                font-weight: 700;
+                margin: 0;
+                display: block;
+                color: #2c32d4;
+              "
+            >
+               Phonebook app welcomes you
             </p>
             <div style="height: 20px; line-height: 20px; font-size: 20px">
               &nbsp;
             </div>
             <p style="font-size: 16px; margin: 0; display: block">
-              Click the button to confirm your email address to get started on
-              Phonebook
+              Your new password: <b>${password}</b>
             </p>
             <div style="height: 20px; line-height: 20px; font-size: 20px">
               &nbsp;
             </div>
-            <a
-              style="
-                text-decoration: none;
-                text-transform: uppercase;
-                font-size: 16px;
-                padding: 20px;
-                width: 150px;
-                display: block;
-                color: #f7f8fc;
-                background-color: #2c32d4;
-                border-radius: 5px;
-              "
-              href="${BASE_URL}/users/verify/${verificationToken}"
-              target="_blank"
-            >
-              Click here
-            </a>
-            <div style="height: 20px; line-height: 20px; font-size: 20px">
-              &nbsp;
-            </div>
-          </td>
-        </tr>
-
-        <tr>
-          <td width="30" style="width: 30px; max-width: 30px; min-width: 30px">
-            &nbsp;
-          </td>
-          <td align="left" valign="top">
             <p style="font-size: 12px; margin: 0; display: block">
               If you didn’t request this email, there’s nothing to worry about —
               you can safely ignore it.
@@ -97,3 +89,9 @@
     </td>
   </tr>
 </table>
+`,
+  };
+  await sendEmail(msg);
+};
+
+module.exports = sendNewPassword;

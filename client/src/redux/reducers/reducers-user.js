@@ -2,12 +2,10 @@ import * as operations from '../operations/operations-user';
 
 export const registerUser = {
   [operations.registerUser.fulfilled]: (state, { payload }) => {
-    const { token, user } = payload;
     state.error = null;
-    state.token = token;
-    state.user = user;
-    state.status = 'authorized';
-    state.isAuth = true;
+    console.log(payload);
+    state.status = payload.message;
+    state.isAuth = false;
     state.isLoading = false;
   },
   [operations.registerUser.rejected]: (state, { error }) => {
@@ -25,8 +23,9 @@ export const loginUser = {
     const { token, user } = payload;
     state.error = null;
     state.token = token;
-    state.user = user;
-    state.status = 'authorized';
+    state.user.name = user.name;
+    state.user.email = user.email;
+    state.status = payload.message;
     state.isAuth = true;
     state.isLoading = false;
   },
@@ -42,10 +41,13 @@ export const loginUser = {
 
 export const currentUser = {
   [operations.currentUser.fulfilled]: (state, { payload }) => {
-    state.user = payload;
-    state.status = 'authorized';
+    state.user.name = payload.user.name;
+    state.user.email = payload.user.email;
+    state.token = payload.user.token;
+    state.status = payload.message;
     state.isAuth = true;
     state.isLoading = false;
+    state.error = null;
   },
   [operations.currentUser.rejected]: (state, { error }) => {
     state.error = error.message;

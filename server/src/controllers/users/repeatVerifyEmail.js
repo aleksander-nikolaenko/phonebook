@@ -14,7 +14,7 @@ const repeatVerifyEmail = async (req, res) => {
   }
   await sendVerifyEmail(user.email, user.verificationToken);
   res.status(200).json({
-    message: "Verification email sent",
+    message: `Verification email sent to ${email} email address`,
   });
 };
 

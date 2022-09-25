@@ -7,6 +7,7 @@ const updateUserSubscriptionById = require("./updateUserSubscriptionById");
 const updateUserAvatarById = require("./updateUserAvatarById");
 const getUserByVerificationToken = require("./getUserByVerificationToken");
 const updateUserVerificationById = require("./updateUserVerificationById");
+const updateUserPasswordByEmail = require("./updateUserPasswordByEmail");
 
 module.exports = {
   getUserByEmail,
@@ -18,4 +19,5 @@ module.exports = {
   updateUserAvatarById,
   getUserByVerificationToken,
   updateUserVerificationById,
+  updateUserPasswordByEmail,
 };

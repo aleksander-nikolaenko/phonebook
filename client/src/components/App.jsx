@@ -25,13 +25,17 @@ const LoginPage = lazy(() =>
   import('../pages/LoginPage' /* webpackChunkName: "login-page" */)
 );
 
+const RedirectPage = lazy(() =>
+  import('../pages/RedirectPage' /* webpackChunkName: "redirect-page" */)
+);
+
 export const App = () => {
   const isAuth = useSelector(selectors.getIsAuth);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(currentUser());
-  }, [dispatch]);
+  }, [dispatch, isAuth]);
 
   return (
     <>
@@ -89,6 +93,19 @@ export const App = () => {
             >
               <Suspense fallback={<LoaderPage />}>
                 <LoginPage />
+              </Suspense>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path={routesPaths.redirectPage}
+          element={
+            <ProtectedRoute
+              redirectPath={routesPaths.loginPage}
+              isAllowed={!isAuth}
+            >
+              <Suspense fallback={<LoaderPage />}>
+                <RedirectPage />
               </Suspense>
             </ProtectedRoute>
           }

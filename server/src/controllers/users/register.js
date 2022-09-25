@@ -22,7 +22,7 @@ const register = async (req, res) => {
     verificationToken,
   });
   res.status(201).json({
-    message: `User created. Please check your email: ${email} and confirm then`,
+    message: `User created. Please check your email: ${email} and confirm then.`,
     user: {
       name: newUser.name,
       email: newUser.email,

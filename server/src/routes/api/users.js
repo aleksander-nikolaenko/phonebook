@@ -18,6 +18,11 @@ router.post(
   validation(schemas.verify),
   ctrlWrapper(ctrlUsers.repeatVerifyEmail)
 );
+router.post(
+  "/forgot-password",
+  validation(schemas.verify),
+  ctrlWrapper(ctrlUsers.sendPassword)
+);
 
 router.get("/google", ctrlWrapper(ctrlUsers.googleAuth));
 

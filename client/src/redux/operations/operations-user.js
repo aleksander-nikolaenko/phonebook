@@ -5,17 +5,14 @@ export const registerUser = createAsyncThunk(
   'user/register',
   async userData => {
     const { data } = await contactsApi.registerUser(userData);
-    const { token, user } = data;
-
-    return { token, user };
+    return data;
   }
 );
 
 export const loginUser = createAsyncThunk('user/login', async userData => {
   const { data } = await contactsApi.loginUser(userData);
-  const { token, user } = data;
 
-  return { user, token };
+  return data;
 });
 
 export const logoutUser = createAsyncThunk(

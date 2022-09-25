@@ -17,7 +17,7 @@ const login = async (req, res) => {
     throw createError(401, "Not registered, token missed");
   }
   res.json({
-    message: "Authentification Success",
+    message: "Authentification success.",
     token,
     user: {
       name: user.name,

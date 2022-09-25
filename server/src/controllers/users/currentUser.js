@@ -6,6 +6,7 @@ const currentUser = async (req, res) => {
     throw createError(404);
   }
   res.status(200).json({
+    message: "User authenticate success",
     user: req.user,
   });
 };

@@ -5,7 +5,7 @@ const sendVerifyEmail = async (email, verificationToken = uuid()) => {
   const { BASE_URL } = process.env;
   const msg = {
     to: email,
-    subject: "Confirm your email",
+    subject: "Confirm email from Phonebook-app",
     html: `
 <table
   cellpadding="0"
@@ -46,7 +46,21 @@ const sendVerifyEmail = async (email, verificationToken = uuid()) => {
                 color: #2c32d4;
               "
             >
-              Hello, welcome Phonebook app
+              Hello, ${email}
+            </p>
+            <div style="height: 20px; line-height: 20px; font-size: 20px">
+              &nbsp;
+            </div>
+            <p
+              style="
+                font-size: 24px;
+                font-weight: 700;
+                margin: 0;
+                display: block;
+                color: #2c32d4;
+              "
+            >
+              Welcome to Phonebook app
             </p>
             <div style="height: 20px; line-height: 20px; font-size: 20px">
               &nbsp;
@@ -78,15 +92,7 @@ const sendVerifyEmail = async (email, verificationToken = uuid()) => {
             <div style="height: 20px; line-height: 20px; font-size: 20px">
               &nbsp;
             </div>
-          </td>
-        </tr>
-
-        <tr>
-          <td width="30" style="width: 30px; max-width: 30px; min-width: 30px">
-            &nbsp;
-          </td>
-          <td align="left" valign="top">
-            <p style="font-size: 12px; margin: 0; display: block">
+                        <p style="font-size: 12px; margin: 0; display: block">
               If you didn’t request this email, there’s nothing to worry about —
               you can safely ignore it.
             </p>

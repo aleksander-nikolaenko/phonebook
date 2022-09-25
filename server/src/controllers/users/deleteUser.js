@@ -16,7 +16,7 @@ const deleteUser = async (req, res) => {
   }
 
   res.status(200).json({
-    message: "User and user information deleted successfully",
+    message: "User and user information deleted successfully.",
     user,
   });
 };
