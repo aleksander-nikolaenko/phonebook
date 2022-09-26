@@ -47,6 +47,10 @@ This project was created using the following technologies.
 
 MongoDB (MongoDB Atlas)
 
+#### API Documentation 
+
+Swagger (OpenAPI 3.0) [API Documentation](https://nik-phonebook.herokuapp.com/api-docs/)
+
 ## Configuration and Setup
 
 In order to run this project locally, simply fork and clone the repository or download as zip and unzip on your machine.
