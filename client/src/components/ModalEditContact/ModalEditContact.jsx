@@ -63,13 +63,7 @@ export const ModalEditContact = ({ active, setActive, onSubmit }) => {
           ...values,
           [name]: value,
         });
-        if (name === 'name') {
-          setErrors({
-            ...errors,
-            [name]: `${name} is required`,
-          });
-          return false;
-        }
+
         setErrors({
           ...errors,
           [name]: ``,
@@ -99,48 +93,19 @@ export const ModalEditContact = ({ active, setActive, onSubmit }) => {
 
   const handleSubmit = event => {
     event.preventDefault();
-
-    // const hasName = contacts.find(contact => contact.name === values.name);
-    // const hasNumber = contacts.find(contact => contact.phone === values.phone);
-    // if (hasName) {
-    //   toast.warn(`Name is already in contacts.`);
-    //   return;
-    // }
-    // if (hasNumber) {
-    //   toast.warn(`Number is already in contacts.`);
-    //   return;
-    // }
+    if (!values.name && !values.email && !values.phone) return;
     if (
       validationField('name', values.name, NAME_REGEX) &&
       validationField('email', values.email, EMAIL_REGEX) &&
       validationField('phone', values.phone, NUMBER_REGEX)
     ) {
-      const contact = {
-        name: values.name,
-      };
+      const contact = {};
+      if (values.name) contact.name = values.name;
       if (values.email) contact.email = values.email;
       if (values.phone) contact.phone = values.phone;
       onSubmit(contact);
       reset();
       setActive(false);
-
-      // dispatch(addContact(contact))
-      //   .unwrap()
-      //   .then(res => {
-      //     toast.success(`${res.name} is add in contacts.`);
-      //     dispatch(fetchContacts())
-      //       .unwrap()
-      //       .then(() => {
-      //         toast.success(`Contacts updated`);
-      //       })
-      //       .catch(() => {
-      //         toast.error(`Contacts didn't updated`);
-      //       });
-      //     reset();
-      //   })
-      //   .catch(() => {
-      //     toast.error(`${values.name} isn't add in contacts.`);
-      //   });
     }
   };
   return (
@@ -162,7 +127,6 @@ export const ModalEditContact = ({ active, setActive, onSubmit }) => {
             margin="normal"
             error={!!errors.name}
             helperText={errors.name}
-            required
             fullWidth
             id="name"
             name="name"

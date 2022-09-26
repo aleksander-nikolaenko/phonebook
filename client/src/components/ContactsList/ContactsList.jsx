@@ -50,6 +50,10 @@ export const ContactsList = () => {
   };
   const handleSubmitModal = newContact => {
     const keys = Object.keys(newContact);
+    if (keys.length === 0) {
+      toast.error(`No filed for update contacts didn't updated`);
+      return;
+    }
     for (let i = 0; i < keys.length; i += 1) {
       if (allContacts.find(item => newContact[keys[i]] === item[keys[i]])) {
         toast.warn(`${keys[i]} is already in contacts.`);
@@ -59,7 +63,6 @@ export const ContactsList = () => {
     dispatch(updateContact({ id: editContactId, contact: newContact }))
       .unwrap()
       .then(res => {
-        console.log(res);
         toast.success(`${res.contact.name} is update in contacts.`);
         dispatch(fetchContacts())
           .unwrap()

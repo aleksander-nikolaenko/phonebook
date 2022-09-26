@@ -494,6 +494,17 @@
         "parameters": [],
         "security": [{ "Bearer": [] }],
 
+        "requestBody": {
+          "description": "Add contact object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateContactRequest"
+              }
+            }
+          }
+        },
+
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -534,7 +545,7 @@
     },
 
     "/contacts/{id}": {
-      "put": {
+      "patch": {
         "tags": ["Contacts"],
         "summary": "Update user contact",
         "parameters": [
@@ -548,6 +559,17 @@
           }
         ],
         "security": [{ "Bearer": [] }],
+
+        "requestBody": {
+          "description": "Add contact object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateContactRequest"
+              }
+            }
+          }
+        },
 
         "responses": {
           "200": {
@@ -950,7 +972,7 @@
           "phone": {
             "type": "string",
             "description": "Contact phone",
-            "example": "(123) 456-7890"
+            "example": "+381234567890"
           },
           "favorite": {
             "type": "boolean",
@@ -966,7 +988,7 @@
         "example": {
           "name": "John Doe",
           "email": "user@example.com",
-          "phone": "(123) 456-7890",
+          "phone": "+381234567890",
           "favorite": false,
           "owner": "63308767e21eb943f2ad368f",
           "_id": "63308a185cf14043e3ac5d23"
@@ -978,6 +1000,51 @@
         "description": "User contacts list",
         "items": {
           "$ref": "#/components/schemas/ContactInfo"
+        }
+      },
+
+      "CreateContactRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Contact name",
+            "required": true,
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "description": "Contact email",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Contact phone",
+            "example": "+381234567890"
+          }
+        }
+      },
+
+      "UpdateContactRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Contact name",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "description": "Contact email",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Contact phone",
+            "example": "+381234567890"
+          }
         }
       },
 

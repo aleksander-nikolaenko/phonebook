@@ -31,10 +31,17 @@ const addSchema = Joi.object({
   phone: Joi.string().pattern(/^\+?[0-9]?[0-9]?([0-9]{10})$/),
   favorite: Joi.boolean(),
 });
+const updateSchema = Joi.object({
+  name: Joi.string().min(2).max(100),
+  email: Joi.string().email({ tlds: false }),
+  phone: Joi.string().pattern(/^\+?[0-9]?[0-9]?([0-9]{10})$/),
+  favorite: Joi.boolean(),
+});
 const updateFavoriteSchema = Joi.object({ favorite: Joi.boolean().required() });
 
 const schemas = {
   add: addSchema,
+  update: updateSchema,
   updateFavorite: updateFavoriteSchema,
 };
 

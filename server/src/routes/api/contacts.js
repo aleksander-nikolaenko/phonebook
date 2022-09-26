@@ -17,10 +17,10 @@ router.post(
 
 router.delete("/:id", auth, ctrlWrapper(ctrlContacts.deleteContactById));
 
-router.put(
+router.patch(
   "/:id",
   auth,
-  validation(schemas.add),
+  validation(schemas.update),
   ctrlWrapper(ctrlContacts.updateContactById)
 );
 

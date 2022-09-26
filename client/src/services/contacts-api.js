@@ -51,7 +51,7 @@ export const addContact = (contact, token) => {
 };
 
 export const updateContact = (id, contact, token) => {
-  return http.put(`${baseURL}/contacts/${id}`, contact, {
+  return http.patch(`${baseURL}/contacts/${id}`, contact, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

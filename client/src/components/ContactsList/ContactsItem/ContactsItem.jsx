@@ -53,7 +53,7 @@ export const ContactsItem = props => {
       <div>
         <p className={styles.name}>
           <PersonIcon color="primary" sx={{ mr: '8px' }} />
-          {name.length > 25 ? name.substr(0, 32) + '...' : name}
+          {name.length > 32 ? name.substr(0, 32) + '...' : name}
         </p>
         {email && (
           <p className={styles.contacts}>
@@ -64,7 +64,7 @@ export const ContactsItem = props => {
               sx={{ display: 'flex' }}
             >
               <AlternateEmailIcon color="secondary" sx={{ mr: '8px' }} />
-              {email.length > 25 ? email.substr(0, 32) + '...' : email}
+              {email.length > 32 ? email.substr(0, 32) + '...' : email}
             </Link>
           </p>
         )}
