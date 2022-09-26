@@ -43,7 +43,15 @@ export const fetchContacts = token => {
 };
 
 export const addContact = (contact, token) => {
-  return http.post(`${baseURL}/contacts/`, contact, {
+  return http.post(`${baseURL}/contacts`, contact, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const updateContact = (id, contact, token) => {
+  return http.put(`${baseURL}/contacts/${id}`, contact, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

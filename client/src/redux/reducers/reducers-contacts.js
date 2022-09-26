@@ -28,6 +28,19 @@ export const addContact = {
   },
 };
 
+export const updateContact = {
+  [operations.updateContact.fulfilled]: state => {
+    state.status = 'idle';
+  },
+  [operations.updateContact.rejected]: (state, { error }) => {
+    state.error = error;
+    state.status = 'idle';
+  },
+  [operations.updateContact.pending]: state => {
+    state.status = 'updating';
+  },
+};
+
 export const deleteContact = {
   [operations.deleteContact.fulfilled]: state => {
     state.status = 'idle';

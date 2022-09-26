@@ -16,6 +16,10 @@
     {
       "name": "Users",
       "description": "User endpoints"
+    },
+    {
+      "name": "Contacts",
+      "description": "Contacts endpoints"
     }
   ],
 
@@ -438,6 +442,202 @@
           }
         }
       }
+    },
+
+    "/contacts": {
+      "get": {
+        "tags": ["Contacts"],
+        "summary": "Get all user contacts",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactsList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoTokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      },
+      "post": {
+        "tags": ["Contacts"],
+        "summary": "Add user contact",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateContactResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoTokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/contacts/{id}": {
+      "put": {
+        "tags": ["Contacts"],
+        "summary": "Update user contact",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Contact id ",
+            "required": true,
+            "type": "string",
+            "example": "630f7f382a67312b287559a0"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateContactResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoTokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Contacts"],
+        "summary": "Delete user contact",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Contact id ",
+            "required": true,
+            "type": "string",
+            "example": "630f7f382a67312b287559a0"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteContactResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No token provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoTokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid access token)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {}
+          }
+        }
+      }
     }
   },
   "components": {
@@ -725,6 +925,95 @@
             "description": "error message",
             "example": "Email not verify"
           }
+        }
+      },
+
+      "ContactInfo": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Contact ID",
+            "example": "63308a185cf14043e3ac5d23"
+          },
+          "name": {
+            "type": "string",
+            "description": "Contact name",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "description": "Contact email",
+            "format": "email",
+            "example": "user@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Contact phone",
+            "example": "(123) 456-7890"
+          },
+          "favorite": {
+            "type": "boolean",
+            "description": "Contact favorite",
+            "example": false
+          },
+          "owner": {
+            "type": "string",
+            "description": "Contact owner ID  ",
+            "example": "63308767e21eb943f2ad368f"
+          }
+        },
+        "example": {
+          "name": "John Doe",
+          "email": "user@example.com",
+          "phone": "(123) 456-7890",
+          "favorite": false,
+          "owner": "63308767e21eb943f2ad368f",
+          "_id": "63308a185cf14043e3ac5d23"
+        }
+      },
+
+      "ContactsList": {
+        "type": "array",
+        "description": "User contacts list",
+        "items": {
+          "$ref": "#/components/schemas/ContactInfo"
+        }
+      },
+
+      "CreateContactResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "message",
+            "example": "Contact added successfully"
+          },
+          "contact": { "$ref": "#/components/schemas/ContactInfo" }
+        }
+      },
+
+      "DeleteContactResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "message",
+            "example": "Contact deleted successfully"
+          },
+          "contact": { "$ref": "#/components/schemas/ContactInfo" }
+        }
+      },
+
+      "UpdateContactResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "message",
+            "example": "Contact updated successfully"
+          },
+          "contact": { "$ref": "#/components/schemas/ContactInfo" }
         }
       },
 

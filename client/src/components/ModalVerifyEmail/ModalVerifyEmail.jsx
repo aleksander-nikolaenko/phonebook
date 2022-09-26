@@ -68,7 +68,7 @@ export const ModalVerifyEmail = ({ active, setActive }) => {
         component="form"
         onSubmit={handleSubmit}
         noValidate
-        sx={{ width: '100%', mt: 1 }}
+        sx={{ width: '100%', maxWidth: '450px', mt: 1 }}
       >
         <TextField
           margin="normal"
@@ -119,8 +119,7 @@ export const ModalVerifyEmail = ({ active, setActive }) => {
   );
 };
 
-Modal.propTypes = {
+ModalVerifyEmail.propTypes = {
   active: PropTypes.bool.isRequired,
   setActive: PropTypes.func.isRequired,
-  children: PropTypes.node,
 };

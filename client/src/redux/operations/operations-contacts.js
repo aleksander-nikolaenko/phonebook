@@ -19,6 +19,19 @@ export const addContact = createAsyncThunk(
   }
 );
 
+export const updateContact = createAsyncThunk(
+  'contacts/updateContacts',
+  async ({ id, contact }, thunkAPI) => {
+    const persistedToken = thunkAPI.getState().auth.token;
+    const response = await contactsApi.updateContact(
+      id,
+      contact,
+      persistedToken
+    );
+    return response.data;
+  }
+);
+
 export const deleteContact = createAsyncThunk(
   'contacts/deleteContacts',
   async (id, thunkAPI) => {

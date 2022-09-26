@@ -19,6 +19,7 @@ const contactsSlice = createSlice({
   extraReducers: {
     ...extraReducersContacts.fetchContacts,
     ...extraReducersContacts.addContact,
+    ...extraReducersContacts.updateContact,
     ...extraReducersContacts.deleteContact,
   },
 });

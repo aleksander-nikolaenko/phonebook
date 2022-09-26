@@ -2,6 +2,7 @@ const queryString = require("query-string");
 const axios = require("axios");
 const bcrypt = require("bcrypt");
 const serviceUsers = require("../../services/users");
+const serviceContacts = require("../../services/contacts");
 const { createError } = require("../../helpers");
 
 const googleRedirect = async (req, res) => {
@@ -40,6 +41,12 @@ const googleRedirect = async (req, res) => {
       avatarURL,
       verificationToken: "google-auth",
       verify: true,
+    });
+    await serviceContacts.addContact({
+      name: "My contacts",
+      email,
+      phone: "+111111111111",
+      owner: user._id,
     });
   }
   const token = user.createToken();

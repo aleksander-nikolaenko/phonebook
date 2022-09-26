@@ -10,6 +10,9 @@ export const http = {
   delete(url, options) {
     return axios.delete(url, options);
   },
+  put(url, data, options) {
+    return axios.put(url, data, options);
+  },
   patch(url, data, options) {
     return axios.patch(url, data, options);
   },

@@ -16,7 +16,8 @@ const getFilteredContacts = createSelector(
     return contacts.filter(
       contact =>
         contact.name.toLowerCase().includes(filter.toLowerCase().trim()) ||
-        contact.number.includes(filter.toLowerCase().trim())
+        contact.email?.includes(filter.toLowerCase().trim()) ||
+        contact.phone?.includes(filter.toLowerCase().trim())
     );
   }
 );

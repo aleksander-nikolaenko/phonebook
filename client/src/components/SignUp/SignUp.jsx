@@ -24,7 +24,7 @@ import { Modal } from 'components/Modal';
 
 const theme = createTheme();
 
-const NAME_REGEX = /^[A-z][A-z0-9-_-\s?]{1,23}$/;
+const NAME_REGEX = /^[A-z][A-z0-9-_-\s?]{2,50}$/;
 const EMAIL_REGEX = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 const PWD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
 

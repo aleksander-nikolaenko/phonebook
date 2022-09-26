@@ -7,8 +7,9 @@ const deleteContactById = async (req, res) => {
   if (!result) {
     throw createError(404);
   }
-  res.json({
-    message: "contact deleted",
+  res.status(200).json({
+    message: "Contact deleted successfully",
+    contact: result,
   });
 };
 

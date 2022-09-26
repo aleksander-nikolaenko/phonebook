@@ -58,7 +58,7 @@ const sendNewPassword = async (email, password) => {
                 color: #2c32d4;
               "
             >
-               Phonebook app welcomes you
+              The Phonebook app welcomes you
             </p>
             <div style="height: 20px; line-height: 20px; font-size: 20px">
               &nbsp;

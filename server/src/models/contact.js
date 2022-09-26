@@ -27,10 +27,8 @@ const contactSchema = new Schema(
 
 const addSchema = Joi.object({
   name: Joi.string().min(2).max(100).required(),
-  email: Joi.string().email({ tlds: false }).required(),
-  phone: Joi.string()
-    .pattern(/^\(([0-9]{3})\)([ ])([0-9]{3})([-])([0-9]{4})$/)
-    .required(),
+  email: Joi.string().email({ tlds: false }),
+  phone: Joi.string().pattern(/^\+?[0-9]?[0-9]?([0-9]{10})$/),
   favorite: Joi.boolean(),
 });
 const updateFavoriteSchema = Joi.object({ favorite: Joi.boolean().required() });

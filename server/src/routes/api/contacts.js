@@ -6,9 +6,7 @@ const { schemas } = require("../../models/contact");
 
 const router = new express.Router();
 
-// router.get("/", validationToken, ctrlWrapper(ctrlContacts.getContacts));
-
-// router.get("/:id", validationToken, ctrlWrapper(ctrlContacts.getContactById));
+router.get("/", auth, ctrlWrapper(ctrlContacts.getAllContacts));
 
 router.post(
   "/",
@@ -17,18 +15,18 @@ router.post(
   ctrlWrapper(ctrlContacts.addContact)
 );
 
-// router.delete(
-//   "/:id",
-//   validationToken,
-//   ctrlWrapper(ctrlContacts.deleteContactById)
-// );
+router.delete("/:id", auth, ctrlWrapper(ctrlContacts.deleteContactById));
 
-// router.put(
-//   "/:id",
-//   validationToken,
-//   validationReqBody(schemas.add),
-//   ctrlWrapper(ctrlContacts.updateContactById)
-// );
+router.put(
+  "/:id",
+  auth,
+  validation(schemas.add),
+  ctrlWrapper(ctrlContacts.updateContactById)
+);
+
+// router.get("/", auth, ctrlWrapper(ctrlContacts.getContacts));
+
+// router.get("/:id", validationToken, ctrlWrapper(ctrlContacts.getContactById));
 
 // router.patch(
 //   "/:id/favorite",

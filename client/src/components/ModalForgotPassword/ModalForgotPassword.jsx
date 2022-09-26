@@ -43,6 +43,7 @@ export const ModalForgotPassword = ({ active, setActive }) => {
         await forgotUserPassword(userData);
         toast.success(`Email is sent. Please check your email`);
         setActive(false);
+        setValueEmail('');
       } catch (error) {
         if (error.message === 'Request failed with status code 400') {
           toast.error(`Email is wrong, user not found`);
@@ -65,7 +66,7 @@ export const ModalForgotPassword = ({ active, setActive }) => {
         component="form"
         onSubmit={handleSubmit}
         noValidate
-        sx={{ width: '100%', mt: 1 }}
+        sx={{ width: '100%', maxWidth: '450px', mt: 1 }}
       >
         <TextField
           margin="normal"
@@ -80,6 +81,19 @@ export const ModalForgotPassword = ({ active, setActive }) => {
           autoComplete="email"
           onChange={handleChange}
         />
+        {/* <TextField
+          margin="normal"
+          error={!!errorEmail}
+          helperText={errorEmail}
+          required
+          fullWidth
+          id="forgotEmail1"
+          name="email"
+          value={valueEmail}
+          label="Email Address"
+          autoComplete="email"
+          onChange={handleChange}
+        /> */}
         <Grid
           container
           direction="row"
@@ -116,8 +130,7 @@ export const ModalForgotPassword = ({ active, setActive }) => {
   );
 };
 
-Modal.propTypes = {
+ModalForgotPassword.propTypes = {
   active: PropTypes.bool.isRequired,
   setActive: PropTypes.func.isRequired,
-  children: PropTypes.node,
 };

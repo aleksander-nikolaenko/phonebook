@@ -10,7 +10,6 @@ const auth = async (req, _, next) => {
       if (bearer !== "Bearer") {
         next(createError(401, "Not authorized"));
       }
-      console.log(token);
       const { id } = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
       const user = await serviceUsers.getUserById(id);
       if (!user || !user.token) {

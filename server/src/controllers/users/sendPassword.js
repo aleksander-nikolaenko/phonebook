@@ -11,7 +11,12 @@ const sendPassword = async (req, res) => {
   if (!user) {
     throw createError(400, "Email is wrong, user not found");
   }
-  const newPassword = randomize("Aa0)", 8);
+  const newPassword =
+    randomize("Aa0", 3) +
+    randomize("0", 1) +
+    randomize("Aa0", 3) +
+    randomize("0", 1) +
+    randomize("Aa0", 3);
   const hashPassword = await bcrypt.hash(
     newPassword,
     Number(process.env.HASH_POWER)

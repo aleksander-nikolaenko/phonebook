@@ -5,14 +5,14 @@
   justify-content: space-between;
 }
 
-.text {
+.contacts {
   display: flex;
   margin: 0;
   font-size: 16px;
   line-height: normal;
 }
 
-.number {
+.name {
   display: flex;
   margin: 0;
   font-weight: bold;
@@ -20,7 +20,7 @@
   line-height: normal;
 }
 
-.button {
+/* .button {
   align-self: stretch;
   min-width: 24px;
   min-height: 18px;
@@ -38,9 +38,9 @@
 
 .button:hover {
   background-color: #c00;
-}
+} */
 
-.wrapper {
+.btnWrapper {
   max-width: 360px;
   display: flex;
   flex-direction: column;
