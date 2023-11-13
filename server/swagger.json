@@ -11,7 +11,7 @@
   },
   "consumes": ["application/json"],
   "produces": ["application/json"],
-  "servers": [{ "url": "https://nik-phonebook.herokuapp.com//api/" }],
+  "servers": [{ "url": "https://phonebook-api-atj5.onrender.com/api/" }],
   "tags": [
     {
       "name": "Users",

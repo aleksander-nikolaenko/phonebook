@@ -49,7 +49,7 @@ MongoDB (MongoDB Atlas)
 
 #### API Documentation 
 
-Swagger (OpenAPI 3.0) [API Documentation](https://nik-phonebook.herokuapp.com/api-docs/)
+Swagger (OpenAPI 3.0) [API Documentation](https://phonebook-api-atj5.onrender.com/api-docs/)
 
 ## Configuration and Setup
 
